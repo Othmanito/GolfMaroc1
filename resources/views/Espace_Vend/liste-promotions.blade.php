@@ -131,7 +131,7 @@
                                             </div>
                                         </div>
 
-                                        {{-- Prix --}}
+                                        {{-- Prix HT --}}
                                         <div class="row">
                                             <div class="col-lg-2"></div>
                                             <div class="col-lg-4">
@@ -139,6 +139,16 @@
                                             </div>
                                             <div class="col-md-6">
                                               <b>{{ \App\Models\Article::getPrixHT($item->id_article) }} Dhs</b>
+                                            </div>
+                                        </div>
+                                        {{-- Prix TTC --}}
+                                        <div class="row">
+                                            <div class="col-lg-2"></div>
+                                            <div class="col-lg-4">
+                                                <li>Prix de vente TTC  :    </li>
+                                            </div>
+                                            <div class="col-md-6">
+                                              <b>{{ \App\Models\Article::getPrixTTC($item->id_article) }} Dhs</b>
                                             </div>
                                         </div>
 
@@ -161,7 +171,7 @@
                                                 <li>Prix de promotion : </li>
                                             </div>
                                             <div class="col-md-6">
-                                              <b>{{ \App\Models\Article::getPrixHT($item->id_article)- (\App\Models\Article::getPrixHT($item->id_article)*(\App\Models\Promotion::getTaux($item->id_promotion)/100)) }} Dhs</b>
+                                              <b>{{ \App\Models\Article::getPrixTTC($item->id_article)- (\App\Models\Article::getPrixTTC($item->id_article)*(\App\Models\Promotion::getTaux($item->id_promotion)/100)) }} Dhs</b>
                                             </div>
                                         </div>
                                         {{-- Etat de promotion --}}

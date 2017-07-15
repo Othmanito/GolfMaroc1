@@ -4,8 +4,7 @@
 
 @section('main_content')
 
-    <h3 class="page-header">Detail de la vente  :
-        <strong></strong></h3>
+    <h3 class="page-header">Detail de la vente</h3>
 
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{{ route('magas.home') }}">Dashboard</a></li>
@@ -203,6 +202,18 @@ Indisponible
                                                     <b>{{ \App\Models\Article::getSexe($item->id_article) }}</b>
                                                 </div>
                                             </div>
+
+                                            {{-- Taille --}}
+                                            <div class="row">
+                                                <div class="col-lg-2"></div>
+                                                <div class="col-lg-4">
+                                                    <li>Taille</li>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <b>{{ \App\Models\Vente_article::getTaille($item->id_taille_article) }}</b>
+                                                </div>
+                                            </div>
+
                                             {{-- Prix de gros --}}
                                             <div class="row">
                                                 <div class="col-lg-2"></div>
@@ -225,7 +236,7 @@ Indisponible
                                             <div class="row">
                                                 <div class="col-lg-2"></div>
                                                 <div class="col-lg-4">
-                                                    <li>Prix</li>
+                                                    <li>Prix Unitaire</li>
                                                 </div>
                                             </div>
                                             <div class="row">
@@ -239,29 +250,27 @@ Indisponible
                                                     <b>{{ \App\Models\Article::getPrixTTC($item->id_article) }} Dhs</b>
                                                 </div>
                                             </div>
+                                            {{-- Prix de promotion --}}
                                             <div class="row">
-                                                <hr/>
-                                            </div>
-                                            @if(\App\Models\Stock_taille::hasTailles($item->id_stock))
-                                                <div class="row">
-                                                    <div class="col-md-2">Tailles:</div>
-                                                </div>
-                                                @foreach(\App\Models\Stock_taille::getTailles($item->id_stock) as $taille)
-                                                    <div class="row">
-                                                        <div class="col-md-2"></div>
-                                                        <div class="col-md-2">{{ \App\Models\Taille_article::getTaille($taille->id_taille_article) }}</div>
-                                                        <div class="col-md-2"><b>{{ $taille->quantite }}</b></div>
-                                                    </div>
-                                                @endforeach
-                                            @else
-                                                <div class="row">
-                                                    <div class="col-md-4"></div>
-                                                    <div class="col-md-4"><b><i>Aucune taille</i></b></div>
-                                                    <div class="col-md-4"></div>
+                                                <div class="col-lg-2"></div>
+                                                <div class="col-lg-4">
+                                                    <li>Prix De promotion : </li>
                                                 </div>
 
-                                            @endif
-                                        </div>
+
+
+
+                                                <div class="col-md-6">
+                                                  @if(\App\Models\Promotion::hasPromotion($item->id_article) == true)
+                                                                                        <b>{{ \App\Models\Promotion::getPrixPromotion($item->id_article)}} DH</b>
+                                                  @elseif(\App\Models\Promotion::hasPromotion($item->id_article) == false)
+                                                  Indisponible
+                                                  @endif
+                                                </div>
+
+                                            </div>
+
+                                          
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-default" data-dismiss="modal">Close
                                             </button>

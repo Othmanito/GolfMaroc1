@@ -15,6 +15,21 @@ class Vente_article extends Model
       'id_taille_article', 'quantite', 'prix', 'annulee',
     ];
 
+    public static function getNombreArticles($id_vente)
+    {
+        if (!Vente_article::hasTailles($id_vente))
+            return 0;
+        else {
+            $tailles = Vente_article::getTailles($id_vente);
+            $nbreArticles = 0;
+            foreach ($tailles as $item) {
+                $nbreArticles += $item->quantite;
+            }
+        }
+        return $nbreArticles;
+    }
+
+
     public static function getTaille($p_id)
     {
         $data = self::where('id_taille_article', $p_id)->get()->first();
@@ -30,6 +45,19 @@ class Vente_article extends Model
             return $data->quantite;
         else return null;
     }
+
+    /*public static function getQte($p_id)
+    {
+        $data = self::where('id_vente', $p_id)->get()->first();
+
+
+        if ($data != null)
+            return $data->quantite;
+        else return null;
+
+
+    }*/
+
 
     public static function hasTailles($id_vente_article)
     {

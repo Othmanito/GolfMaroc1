@@ -537,8 +537,8 @@
     @endif
 @endsection
 
-@section('menu_1')@include('Espace_Magas._nav_menu_1')@endsection
-@section('menu_2')@include('Espace_Magas._nav_menu_2')@endsection
+@section('menu_1')@include('Espace_Vente._nav_menu_1')@endsection
+@section('menu_2')@include('Espace_Vente._nav_menu_2')@endsection
 
 @section('styles')
     <style>

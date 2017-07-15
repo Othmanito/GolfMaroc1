@@ -18,6 +18,9 @@ class Article extends Model
         'deleted', 'image', 'valide'
     ];
 
+
+
+
     public static function getPrixPromo($p_id_article, $p_id_magasin)
     {
         $prixHT = Article::where('id_article', $p_id_article)->first()->prix_vente;
@@ -164,7 +167,7 @@ class Article extends Model
         else return null;
     }
 
-  
+
 
     public static function getPrixGrosTTC($p_id)
     {

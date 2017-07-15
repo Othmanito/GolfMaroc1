@@ -44,7 +44,7 @@ class Promotion extends Model
     }
     public static function getPrixPromotion($p_id)
     {
-        $data = self::where('id_article', $p_id)->get()->first();
+        $data = Promotion::where('id_article', $p_id)->get()->first();
         $promo=self::getTauxPromo($data->id_article);
         if ($data != null)
             return number_format(Article::getPrixTTC($data->id_article)-((Article::getPrixTTC($data->id_article)*$promo)/100),2);
