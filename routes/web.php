@@ -213,8 +213,8 @@ Route::group(['middleware' => 'vend'], function () {
     //Vente
     Route::get('/vend/ventes', 'VenteController@ventes')->name('vend.ventes');
     Route::get('/vend/vente/{p_id}', 'VenteController@vente')->name('vend.vente');
-    Route::get('/vend/addVenteSimple', 'VenteController@addVenteSimple')->name('vend.addVenteSimple');
-    Route::get('/vend/addVenteGros', 'VenteController@addVenteGros')->name('vend.addVenteGros');
+    Route::get('/vend/addVenteSimple', 'VenteController@addVenteSimpleV')->name('vend.addVenteSimple');
+    Route::get('/vend/addVenteGros', 'VenteController@addVenteGrosV')->name('vend.addVenteGros');
     Route::post('/vend/submitAddVente', 'VenteController@submitAddVente')->name('vend.submitAddVente');
 
     //Clients

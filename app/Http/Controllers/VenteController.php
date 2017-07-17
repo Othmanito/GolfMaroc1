@@ -30,7 +30,7 @@ class VenteController extends Controller
 
         return view('Espace_Vend.info-vente')->withData($data);//->withMagasin($magasin);
     }
-
+//Vente simple magasinier
     public function addVenteSimple()
     {
         $data = Stock::where('id_magasin', 1)->get();
@@ -45,7 +45,22 @@ class VenteController extends Controller
         $clients = Client::where('id_magasin', 1)->get();
         return view('Espace_Magas.add-vente_simple-form')->withData($data)->withMagasin($magasin)->withModesPaiement($modes)->withClients($clients);
     }
+//Vente simple vendeur
+    public function addVenteSimpleV()
+    {
+        $data = Stock::where('id_magasin', 1)->get();
+        //$data = collect(DB::select("select * from stocks s join articles a on s.id_article = a.id_article join stock_tailles st on st.id_stock = s.id_stock where s.id_magasin=1 order by quantite desc"));
+        //$data = collect(DB::select("select * from stocks s join stock_tailles st on st.id_stock = s.id_stock where s.id_magasin=1 order by st.quantite desc"));
+        //dump($data);
 
+        if ($data->isEmpty())
+            return redirect()->back()->withAlertWarning("Le stock du magasin est vide, veuillez commencer par l'alimenter.");
+        $magasin = Magasin::find(1);
+        $modes = Mode_paiement::all();
+        $clients = Client::where('id_magasin', 1)->get();
+        return view('Espace_Vend.add-vente_simple-form')->withData($data)->withMagasin($magasin)->withModesPaiement($modes)->withClients($clients);
+    }
+//Vente gros magasinier
     public function addVenteGros()
     {
         $data = Stock::where('id_magasin', 1)->get();
@@ -61,15 +76,31 @@ class VenteController extends Controller
         return view('Espace_Magas.add-vente_gros-form')->withData($data)->withMagasin($magasin)->withModesPaiement($modes)->withClients($clients);
     }
 
+//Vente gros vendeur
+    public function addVenteGrosV()
+    {
+        $data = Stock::where('id_magasin', 1)->get();
+        //$data = collect(DB::select("select * from stocks s join articles a on s.id_article = a.id_article join stock_tailles st on st.id_stock = s.id_stock where s.id_magasin=1 order by quantite desc"));
+        //$data = collect(DB::select("select * from stocks s join stock_tailles st on st.id_stock = s.id_stock where s.id_magasin=1 order by st.quantite desc"));
+        //dump($data);
+
+        if ($data->isEmpty())
+            return redirect()->back()->withAlertWarning("Le stock du magasin est vide, veuillez commencer par l'alimenter.");
+        $magasin = Magasin::find(1);
+        $modes = Mode_paiement::all();
+        $clients = Client::where('id_magasin', 1)->get();
+        return view('Espace_Vend.add-vente_gros-form')->withData($data)->withMagasin($magasin)->withModesPaiement($modes)->withClients($clients);
+    }
+
     public function submitAddVente()
     {
-      //  $articles = Article::where('deleted', false)->where('valide', true);
-        $pdf = PDF::loadView('pdf.pdf-facture', ['articles' => DB::table('articles')->get(), 'remises' => DB::table('remises')->get(), 'ventes' => DB::table('ventes')->get(), 'vente_articles' => DB::table('vente_articles')->get(), 'paiements' => DB::table('paiements')->get()]);
+       //$articles = Article::where('deleted', false)->where('valide', true);
+        //$pdf = PDF::loadView('pdf.pdf-facture', ['articles' => DB::table('articles')->get(), 'remises' => DB::table('remises')->get(), 'ventes' => DB::table('ventes')->get(), 'vente_articles' => DB::table('vente_articles')->get(), 'paiements' => DB::table('paiements')->get()]);
 
       //  $pdf = PDF::loadView('pdf.pdf-facture', ['data' => $articles]);
-        return $pdf->stream('Facture ' . date('d-M-Y') . '.pdf');
+      //  return $pdf->stream('Facture ' . date('d-M-Y') . '.pdf');
 
-        dump(request()->all());
+        //dump(request()->all());
 
         //Delete Panier
         //Panier::deletePanier();

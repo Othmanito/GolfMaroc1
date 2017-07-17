@@ -94,14 +94,13 @@
                             <th rowspan="2">Marque</th>
                             <th rowspan="2">Categorie</th>
                             <th colspan="2">Prix de gros</th>
-                            <th colspan="2">Prix</th>
+
                             <th rowspan="2">Etat</th>
                             <th rowspan="2">Actions</th>
 
                         </tr>
                         <tr>
-                            <th>HT</th>
-                            <th>TTC</th>
+
                             <th>HT</th>
                             <th>TTC</th>
                         </tr>
@@ -114,8 +113,7 @@
                             <th>Designation</th>
                             <th>Marque</th>
                             <th>Categorie</th>
-                            <th>HT</th>
-                            <th>TTC</th>
+
                             <th>HT</th>
                             <th>TTC</th>
                             <th></th>
@@ -125,7 +123,7 @@
                         <tbody>
                         @foreach( $data as $item )
 
-                            <tr {{--ondblclick="window.open('{{ Route('magas.stock',[ 'p_id' => $item->id_stock ]) }}');" --}}>
+                            <tr {{--ondblclick="window.open('{{ Route('vend.stock',[ 'p_id' => $item->id_stock ]) }}');" --}}>
 
                                 <td>{{ $loop->index+1 }}</td>
                                 <td>
@@ -149,8 +147,7 @@
                                     <div id="prix_{{ $loop->iteration }}"
                                          title="{{ \App\Models\Article::getPrixTTC($item->id_article) }}">{{ \App\Models\Article::getPrixTTC($item->id_article) }}</div>
                                 </td>
-                                <td align="right">{{ \App\Models\Article::getPrixHT($item->id_article) }}</td>
-                                <td align="right">{{ \App\Models\Article::getPrixTTC($item->id_article) }}</td>
+
                                 <td align="center">
                                     @if(\App\Models\Stock::getState($item->id_stock) == 0)
                                         <div id="circle"
@@ -500,18 +497,18 @@
                         {"width": "05%", "targets": 1, "type": "string", "visible": true},  //ref
                         {"width": "05%", "targets": 2, "type": "string", "visible": true},  //code
 
-                        //{"width": "08%", "targets": 3, "type": "string", "visible": true},    //desi
+                        {"width": "08%", "targets": 3, "type": "string", "visible": true},    //desi
                         {"width": "08%", "targets": 4, "type": "string", "visible": false},     //Marque
                         {"width": "08%", "targets": 5, "type": "string", "visible": false},     //caegorie
 
+                        //{"width": "02%", "targets": 6, "type": "string", "visible": true},      //HT
+                        //{"width": "02%", "targets": 7, "type": "num-fmt", "visible": true},     //TTC
                         {"width": "02%", "targets": 6, "type": "string", "visible": true},      //HT
                         {"width": "02%", "targets": 7, "type": "num-fmt", "visible": true},     //TTC
-                        {"width": "02%", "targets": 8, "type": "string", "visible": true},      //HT
-                        {"width": "02%", "targets": 9, "type": "num-fmt", "visible": true},     //TTC
 
-                        {"width": "05%", "targets": 10, "type": "num-fmt", "visible": true},     //etat
+                        {"width": "05%", "targets": 8, "type": "num-fmt", "visible": true},     //etat
 
-                        {"width": "04%", "targets": 11, "type": "num-fmt", "visible": true, "searchable": false}
+                        {"width": "04%", "targets": 9, "type": "num-fmt", "visible": true, "searchable": false}
                     ],
                     "select": {
                         items: 'column'
@@ -537,8 +534,8 @@
     @endif
 @endsection
 
-@section('menu_1')@include('Espace_Vente._nav_menu_1')@endsection
-@section('menu_2')@include('Espace_Vente._nav_menu_2')@endsection
+@section('menu_1')@include('Espace_Vend._nav_menu_1')@endsection
+@section('menu_2')@include('Espace_Vend._nav_menu_2')@endsection
 
 @section('styles')
     <style>

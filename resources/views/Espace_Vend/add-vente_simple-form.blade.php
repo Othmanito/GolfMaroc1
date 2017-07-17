@@ -43,15 +43,14 @@
                             <th rowspan="2">Designation</th>
                             <th rowspan="2">Marque</th>
                             <th rowspan="2">Categorie</th>
-                            <th colspan="2">Prix de gros</th>
-                            <th colspan="2">Prix</th>
+
+                            <th colspan="2">Prix Unitaire </th>
                             <th rowspan="2">Etat</th>
                             <th rowspan="2">Actions</th>
 
                         </tr>
                         <tr>
-                            <th>HT</th>
-                            <th>TTC</th>
+
                             <th>HT</th>
                             <th>TTC</th>
                         </tr>
@@ -64,8 +63,7 @@
                             <th>Designation</th>
                             <th>Marque</th>
                             <th>Categorie</th>
-                            <th>HT</th>
-                            <th>TTC</th>
+
                             <th>HT</th>
                             <th>TTC</th>
                             <th></th>
@@ -75,7 +73,7 @@
                         <tbody>
                         @foreach( $data as $item )
 
-                            <tr {{--ondblclick="window.open('{{ Route('magas.stock',[ 'p_id' => $item->id_stock ]) }}');" --}}>
+                            <tr {{--ondblclick="window.open('{{ Route('vend.stock',[ 'p_id' => $item->id_stock ]) }}');" --}}>
 
                                 <input type="hidden" name="id_stock[{{ $loop->index+1 }}]" value="{{ $item->id_stock }}"/>
 
@@ -96,11 +94,7 @@
                                 </td>
                                 <td>{{ \App\Models\Article::getMarque($item->id_article) }}</td>
                                 <td>{{ \App\Models\Article::getCategorie($item->id_article) }}</td>
-                                <td align="right">{{ \App\Models\Article::getPrixHT($item->id_article) }}</td>
-                                <td align="right">
-                                    <div id="prix_{{ $loop->iteration }}"
-                                         title="{{ \App\Models\Article::getPrixTTC($item->id_article) }}">{{ \App\Models\Article::getPrixTTC($item->id_article) }}</div>
-                                </td>
+
                                 <td align="right">{{ \App\Models\Article::getPrixHT($item->id_article) }}</td>
                                 <td align="right">{{ \App\Models\Article::getPrixTTC($item->id_article) }}</td>
                                 <td align="center">
@@ -517,18 +511,18 @@
                         {"width": "05%", "targets": 1, "type": "string", "visible": true},  //ref
                         {"width": "05%", "targets": 2, "type": "string", "visible": true},  //code
 
-                        //{"width": "08%", "targets": 3, "type": "string", "visible": true},    //desi
+                        {"width": "08%", "targets": 3, "type": "string", "visible": true},    //desi
                         {"width": "08%", "targets": 4, "type": "string", "visible": false},     //Marque
                         {"width": "08%", "targets": 5, "type": "string", "visible": false},     //caegorie
 
+                      //  {"width": "02%", "targets": 6, "type": "string", "visible": true},      //HT
+                      //  {"width": "02%", "targets": 7, "type": "num-fmt", "visible": true},     //TTC
                         {"width": "02%", "targets": 6, "type": "string", "visible": true},      //HT
                         {"width": "02%", "targets": 7, "type": "num-fmt", "visible": true},     //TTC
-                        {"width": "02%", "targets": 8, "type": "string", "visible": true},      //HT
-                        {"width": "02%", "targets": 9, "type": "num-fmt", "visible": true},     //TTC
 
-                        {"width": "05%", "targets": 10, "type": "num-fmt", "visible": true},     //etat
+                        {"width": "05%", "targets": 8, "type": "num-fmt", "visible": true},     //etat
 
-                        {"width": "04%", "targets": 11, "type": "num-fmt", "visible": true, "searchable": false}
+                        {"width": "04%", "targets": 9, "type": "num-fmt", "visible": true, "searchable": false}
                     ],
                     "select": {
                         items: 'column'
