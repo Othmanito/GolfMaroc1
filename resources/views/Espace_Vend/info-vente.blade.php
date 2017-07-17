@@ -214,6 +214,17 @@ Indisponible
                                                 </div>
                                             </div>
 
+                                            {{-- Quantité --}}
+                                            <div class="row">
+                                                <div class="col-lg-2"></div>
+                                                <div class="col-lg-4">
+                                                    <li>Quantite</li>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <b>{{ \App\Models\Vente_article::getQuantite($item->id_vente_article) }}</b>
+                                                </div>
+                                            </div>
+
                                             {{-- Prix de gros --}}
                                             <div class="row">
                                                 <div class="col-lg-2"></div>
@@ -225,11 +236,11 @@ Indisponible
                                                 <div class="col-lg-3"></div>
                                                 <div class="col-md-1">HT</div>
                                                 <div class="col-md-3">
-                                                    <b>{{ \App\Models\Article::getPrixGrosHT($item->id_article) }} Dhs</b>
+                                                    <b>{{ \App\Models\Article::getPrixGrosHT($item->id_article) }} DH</b>
                                                 </div>
                                                 <div class="col-md-1">TTC</div>
                                                 <div class="col-md-3">
-                                                    <b>{{ \App\Models\Article::getPrixGrosTTC($item->id_article) }} Dhs</b>
+                                                    <b>{{ \App\Models\Article::getPrixGrosTTC($item->id_article) }} DH</b>
                                                 </div>
                                             </div>
                                             {{-- Prix --}}
@@ -243,11 +254,11 @@ Indisponible
                                                 <div class="col-lg-3"></div>
                                                 <div class="col-md-1">HT</div>
                                                 <div class="col-md-3">
-                                                    <b>{{ \App\Models\Article::getPrixHT($item->id_article) }} Dhs</b>
+                                                    <b>{{ \App\Models\Article::getPrixHT($item->id_article) }} DH</b>
                                                 </div>
                                                 <div class="col-md-1">TTC</div>
                                                 <div class="col-md-3">
-                                                    <b>{{ \App\Models\Article::getPrixTTC($item->id_article) }} Dhs</b>
+                                                    <b>{{ \App\Models\Article::getPrixTTC($item->id_article) }} DH</b>
                                                 </div>
                                             </div>
                                             {{-- Prix de promotion --}}
@@ -270,7 +281,7 @@ Indisponible
 
                                             </div>
 
-                                          
+
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-default" data-dismiss="modal">Close
                                             </button>

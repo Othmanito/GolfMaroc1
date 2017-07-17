@@ -23,9 +23,7 @@
                     <li>
                         <a href="{{ Route('vend.ventes') }}"> Liste de Ventes</a>
                     </li>
-                    <li>
-                        <a href="{{ Route('vend.clients') }}">Clients</a>
-                    </li>
+                    
                 </ul>
             </li>
             <li>
