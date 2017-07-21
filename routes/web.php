@@ -193,7 +193,17 @@ Route::group(['middleware' => 'admin'], function () {
 
     Route::get('/admin/addArticle', 'AddController@addArticle')->name('admin.addArticle');
     Route::post('/admin/submitUpdateArticle', 'AdminController@submitUpdateArticle')->name('admin.submitUpdateArticle');
+
+    //Promotion --------------------------------------------------------------------------------------------------------
+    Route::get('/admin/promotions', 'AdminController@promotions')->name('admin.promotions');
+    Route::get('/admin/promotion/{p_id}', 'AdminController@promotion')->name('admin.promotion');
+
+    Route::get('/admin/addPromotions', 'AddController@addPromotions')->name('admin.addPromotions');
+    Route::post('/admin/submitAddPromotions', 'AddController@submitAddPromotions')->name('admin.submitAddPromotions');
+    Route::post('/admin/submitUpdatePromotion', 'UpdateController@submitUpdatePromotion')->name('admin.submitUpdatePromotion');
     //------------------------------------------------------------------------------------------------------------------
+
+
 
 });
 
@@ -205,17 +215,17 @@ Route::group(['middleware' => 'vend'], function () {
     Route::get('/vend', 'VendeurController@home')->name('vend.home');
 
     //afficher le stock du magasin principal
-    Route::get('/vend/stocks', 'StockController@main_stocks_V')->name('vend.main_stocks');
-    Route::get('/vend/stocks/{p_id?}', 'StockController@stocks_V')->name('vend.stocks');
+    Route::get('/vend/stocks', 'VendeurController@stocks_V')->name('vend.stocks');
+    //Route::get('/vend/stocks/{p_id?}', 'VendeurController@stocks_V')->name('vend.stocks');
 
     //afficher un article du stock en detail
-    Route::get('/vend/stock/{p_id}', 'StockController@stock')->name('vend.stock');
+    Route::get('/vend/stock/{p_id}', 'VendeurController@stock')->name('vend.stock');
     //Vente
-    Route::get('/vend/ventes', 'VenteController@ventes')->name('vend.ventes');
-    Route::get('/vend/vente/{p_id}', 'VenteController@vente')->name('vend.vente');
-    Route::get('/vend/addVenteSimple', 'VenteController@addVenteSimpleV')->name('vend.addVenteSimple');
-    Route::get('/vend/addVenteGros', 'VenteController@addVenteGrosV')->name('vend.addVenteGros');
-    Route::post('/vend/submitAddVente', 'VenteController@submitAddVente')->name('vend.submitAddVente');
+    Route::get('/vend/ventes', 'VendeurController@ventes')->name('vend.ventes');
+    Route::get('/vend/vente/{p_id}', 'VendeurController@vente')->name('vend.vente');
+    Route::get('/vend/addVenteSimple', 'VendeurController@addVenteSimpleV')->name('vend.addVenteSimple');
+    Route::get('/vend/addVenteGros', 'VendeurController@addVenteGrosV')->name('vend.addVenteGros');
+    Route::post('/vend/submitAddVente', 'VendeurController@submitAddVente')->name('vend.submitAddVente');
 
     //Clients
       Route::get('/vend/clients', 'VendeurController@clients')->name('vend.clients');

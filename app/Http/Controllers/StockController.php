@@ -37,17 +37,17 @@ class StockController extends Controller
             return view('Espace_Magas.liste-main_stocks')->withData($data)->withMagasin($magasin)->withTailles($tailles);
     }
 
-    public function main_stocks_V()
-    {
-        $data = Stock::where('id_magasin', 1)->get();
-        $magasin = Magasin::find(1);
-        $tailles = Taille_article::all();
-
-        if ($data->isEmpty())
-            return redirect()->back()->withAlertWarning("Le stock du magasin principal est vide, vous devez le créer.")->withRouteWarning('/magas/addStock/' . 1);
-      else
-            return view('Espace_Vend.liste-main_stocks')->withData($data)->withMagasin($magasin)->withTailles($tailles);
-    }
+    // public function main_stocks_V()
+    // {
+    //     $data = Stock::where('id_magasin', 1)->get();
+    //     $magasin = Magasin::find(1);
+    //     $tailles = Taille_article::all();
+    //
+    //     if ($data->isEmpty())
+    //         return redirect()->back()->withAlertWarning("Le stock du magasin principal est vide, vous devez le créer.")->withRouteWarning('/magas/addStock/' . 1);
+    //   else
+    //         return view('Espace_Vend.liste-main_stocks')->withData($data)->withMagasin($magasin)->withTailles($tailles);
+    // }
 
     public function stocks($p_id)
     {
@@ -64,20 +64,20 @@ class StockController extends Controller
             return view('Espace_Magas.liste-stocks')->withData($data)->withMagasin($magasin)->withTailles($tailles);
     }
 
-    public function stocks_V($p_id)
-    {
-        if ($p_id == 1)
-            return redirect()->back()->withInput()->withAlertInfo("Vous ne pouvez pas accéder à ce magasin de cette manière.");
-
-        $data = Stock::where('id_magasin', $p_id)->get();
-        $magasin = Magasin::find($p_id);
-        $tailles = Taille_article::all();
-
-        if ($data->isEmpty())
-            return redirect()->back()->withAlertWarning("Le stock de ce magasin est vide, vous pouvez commencer par le créer.")->withRouteWarning('/magas/addStock/' . $p_id);
-        else
-            return view('Espace_Vend.liste-stocks')->withData($data)->withMagasin($magasin)->withTailles($tailles);
-    }
+    // public function stocks_V($p_id)
+    // {
+    //     if ($p_id == 1)
+    //         return redirect()->back()->withInput()->withAlertInfo("Vous ne pouvez pas accéder à ce magasin de cette manière.");
+    //
+    //     $data = Stock::where('id_magasin', $p_id)->get();
+    //     $magasin = Magasin::find($p_id);
+    //     $tailles = Taille_article::all();
+    //
+    //     if ($data->isEmpty())
+    //         return redirect()->back()->withAlertWarning("Le stock de ce magasin est vide, vous pouvez commencer par le créer.")->withRouteWarning('/magas/addStock/' . $p_id);
+    //     else
+    //         return view('Espace_Vend.liste-stocks')->withData($data)->withMagasin($magasin)->withTailles($tailles);
+    // }
     //------------------------------------------------------------------------------------------------------------------
     public function stock($id_stock)
     {

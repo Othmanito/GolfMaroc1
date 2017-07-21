@@ -17,7 +17,7 @@
         <div class="col-lg-1"></div>
         <div class="col-lg-10">
 
-            <form method="POST" action="">
+            <form method="POST" action="{{ Route('admin.submitUpdatePromotion') }}">
                 {{ csrf_field() }}
                 <input type="hidden" name="id_promotion" value="{{ $data->id_promotion }}">
 

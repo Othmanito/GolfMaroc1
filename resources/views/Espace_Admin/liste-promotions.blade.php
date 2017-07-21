@@ -6,7 +6,7 @@
     <h3 class="page-header">Promotions</h3>
 
     <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{{ route('magas.home') }}">Dashboard</a></li>
+        <li class="breadcrumb-item"><a href="{{ route('admin.home') }}">Dashboard</a></li>
         <li class="breadcrumb-item ">Gestion des promotions</li>
         <li class="breadcrumb-item active">Liste des promotions</li>
     </ol>
@@ -180,6 +180,12 @@
     </div>
 
 
+    <!-- row -->
+    <div class="row" align="center">
+        <a href="{{ Route('admin.addPromotions') }}" type="button"
+           class="btn btn-outline btn-default" {!! setPopOver("","Ajouter de nouvelles promotions") !!}>
+            <i class="glyphicon glyphicon-plus "></i> Ajouter des promotions</a>
+    </div>
 
 
 @endsection
@@ -193,7 +199,7 @@
 
                 // DataTable
                 var table = $('#example').DataTable({
-                    "lengthMenu": [[10, 20, 30, 50, -1], [10, 20, 30, 50, "Tout"]],
+                    "lengthMenu": [[5, 10, 20, 30, 50, -1], [5, 10, 20, 30, 50, "Tout"]],
                     "searching": true,
                     "paging": true,
                     "info": true,
@@ -293,5 +299,5 @@
     </style>
 @endsection
 
-@section('menu_1') @include('Espace_Magas._nav_menu_1') @endsection
-@section('menu_2') @include('Espace_Magas._nav_menu_2') @endsection
+@section('menu_1') @include('Espace_Admin._nav_menu_1') @endsection
+@section('menu_2') @include('Espace_Admin._nav_menu_2') @endsection

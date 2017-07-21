@@ -2,28 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Client;
-use Illuminate\Support\Facades\Session;
-use Sentinel;
-use Illuminate\Http\Request;
-use Auth;
-use DB;
-use Hash;
-use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\File;
-use Input;
-use App\Models\User;
-use App\Models\Role;
-use App\Models\Magasin;
-use App\Models\Categorie;
-use App\Models\Fournisseur;
-use App\Models\Article;
 use App\Models\Agent;
+use App\Models\Article;
+use App\Models\Categorie;
+use App\Models\Client;
+use App\Models\Fournisseur;
+use App\Models\Magasin;
 use App\Models\Marque;
 use App\Models\Promotion;
 use Carbon\Carbon;
-use \Exception;
+use DB;
+use Exception;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Storage;
+use Input;
 
 class AddController extends Controller
 {
@@ -74,12 +67,17 @@ class AddController extends Controller
         return view('Espace_Magas.add-article-form')->withFournisseurs($fournisseurs)->withMarques($marques)->withCategories($categories);
     }
 
-    public function addPromotion()
+    public function addPromotions()
     {
-        $articles = Article::where('valide',true)->where('deleted',false)->get();
-        $magasins = Magasin::where('deleted',true)->get();
+        $data = Article::where('valide', true)->where('deleted', false)->get();
+        if ($data->isEmpty())
+            return redirect()->back()->withInput()->withAlertWarning("veuillez creer des articles avant de proceder a la creation des promotions.");
 
-        return view('Espace_Magas.add-promotions-form')->with(['articles' => $articles, 'magasins' => $magasins]);
+        $magasins = Magasin::where('deleted', false)->get();
+        if ($magasins->isEmpty())
+            return redirect()->back()->withInput()->withAlertWarning("veuillez creer des magasins avant de proceder a la creation des promotions.");
+
+        return view('Espace_Admin.add-promotions-form')->with(['data' => $data, 'magasins' => $magasins]);
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -88,8 +86,7 @@ class AddController extends Controller
         $nom = request()->get('nom');
         $prenom = request()->get('prenom');
         if (Client::Exists($nom, $prenom))
-            return redirect()->back()->withInput()->with('alert_warning', "le client <b>" . $nom." " .$prenom. "</b> existe deja.");
-
+            return redirect()->back()->withInput()->with('alert_warning', "le client <b>" . $nom . " " . $prenom . "</b> existe deja.");
 
         $age = request()->get('age');
         $ville = request()->get('ville');
@@ -109,7 +106,7 @@ class AddController extends Controller
         } catch (Exception $e) {
             return redirect()->back()->withInput()->with('alert_danger', "Erreur de creation du client.<br>Message d'erreur: <b>" . $e->getMessage() . "</b>");
         }
-        return redirect()->back()->with('alert_success', "Le client <b>" . $nom." ". $prenom . "</b> a bien été créer");
+        return redirect()->back()->with('alert_success', "Le client <b>" . $nom . " " . $prenom . "</b> a bien été créer");
     }
 
     public function submitAddMarque()
@@ -284,16 +281,25 @@ class AddController extends Controller
 
     }
 
-
-    //Valider la creation des promotions
     public function submitAddPromotions()
     {
-
+        //recuperer les variables -----------------
         $id_article = request()->get('id_article');
         $id_magasin = request()->get('id_magasin');
         $taux = request()->get('taux');
         $date_debut = request()->get('date_debut');
         $date_fin = request()->get('date_fin');
+        //-----------------------------------------
+
+        //checking data ---------------------------
+        $hasData = false;
+        for ($i = 1; $i <= count($id_article); $i++) {
+            if (!($taux[$i] == 0 || $taux[$i] == null || $date_debut[$i] == null || $date_fin[$i] == null))
+                $hasData = true;
+        }
+        if (!$hasData)
+            return redirect()->back()->withAlertInfo("Veuillez remplier les champs taux , date debut et date fin pour les articles souhaités.");
+        //-----------------------------------------
 
         $alert1 = "";
         $alert2 = "";
@@ -302,31 +308,87 @@ class AddController extends Controller
         $nbre_articles = 0;
 
         for ($i = 1; $i <= count($id_article); $i++) {
-            if ($taux[$i] == 0 || $taux[$i] == null || $date_debut[$i] == null || $date_fin[$i] == null || $id_magasin[$i] == 0) continue;
+
+            //verifier les dates et les champs -------------------------------------------------------------------------
+            if ($taux[$i] == 0 || $taux[$i] == null || $date_debut[$i] == null || $date_fin[$i] == null) continue;
+            if (!Promotion::isDate($date_debut[$i]) || !Promotion::isDate($date_fin[$i])) {
+                $alert1 = $alert1 . "<li>Erreur de validité des dates pour l'article: <b>" . Article::getDesignation($id_article[$i]) . "</b></li>";
+                $error1 = true;
+                continue;
+                continue;
+            }
 
             $dd = Carbon::createFromFormat('d-m-Y', date('d-m-Y', strtotime($date_debut[$i])));
             $df = Carbon::createFromFormat('d-m-Y', date('d-m-Y', strtotime($date_fin[$i])));
 
-            //skip if EndDate < BeginDate
-            if ($dd->year > $df->year) continue;
-            elseif ($dd->month > $df->month) continue;
-            elseif ($dd->day > $df->day) continue;
-
-            $item = new Promotion;
-            $item->id_article = $id_article[$i];
-            $item->id_magasin = $id_magasin[$i];
-            $item->taux = $taux[$i];
-            $item->date_debut = $date_debut[$i];
-            $item->date_fin = $date_fin[$i];
-            $item->active = true;
-
-            try {
-                $item->save();
-                $nbre_articles++;
-            } catch (Exception $e) {
-                $error2 = true;
-                $alert2 = $alert2 . "<li>Erreur de l'ajout de l'article numero " . $i . ": <br>Message d'erreur: " . $e->getMessage();
+            if ($dd->year > $df->year) {
+                $alert1 = $alert1 . "<li>Erreur de validité des dates pour l'article: <b>" . Article::getDesignation($id_article[$i]) . "</b></li>";
+                $error1 = true;
+                continue;
             }
+
+            if ($dd->year == $df->year)
+                if ($dd->month > $df->month) {
+                    $alert1 = $alert1 . "<li>Erreur de validité des dates pour l'article: <b>" . Article::getDesignation($id_article[$i]) . "</b></li>";
+                    $error1 = true;
+                    continue;
+                } elseif ($dd->month == $df->month)
+                    if ($dd->day > $df->day) {
+                        $alert1 = $alert1 . "<li>Erreur de validité des dates pour l'article: <b>" . Article::getDesignation($id_article[$i]) . "</b></li>";
+                        $error1 = true;
+                        continue;
+                    }
+            //----------------------------------------------------------------------------------------------------------
+
+            //creer les dates pour la db -------------------------------------------------------------------------------
+            $debut = $dd->year . "-" . $dd->month . "-" . $dd->day;
+            $fin = $df->year . "-" . $df->month . "-" . $df->day;
+            //----------------------------------------------------------------------------------------------------------
+
+            // verifier si la promo exist deja -------------------------------------------------------------------------
+            if (Promotion::Exists($id_magasin, $id_article[$i])) {
+
+                //si la promo exist: la mettre a jour
+                $promo = Promotion::getPromotion($id_magasin, $id_article[$i]);
+
+                try {
+                    DB::table('promotions')
+                        ->where('id_promotion', $promo->id_promotion)
+                        ->update(
+                            ['taux' => $taux[$i]],
+                            ['date_debut' => $debut],
+                            ['date_fin' => $fin],
+                            ['active' => true],
+                            ['deleted' => false]
+                        );
+                    $nbre_articles++;
+                } catch (Exception $e) {
+                    $alert2 = $alert2 . "<li>Erreur de creation de la promotion pour l'article: <b>" . Article::getDesignation($id_article[$i]) . "</b>. Message d'erreur: " . $e->getMessage() . "</li>";
+                    $error2 = true;
+                }
+            } else {
+                //si la promo n existe pas: la creee
+                $item = new Promotion;
+                $item->id_article = $id_article[$i];
+                $item->id_magasin = $id_magasin;
+                $item->taux = $taux[$i];
+                $item->date_debut = $debut;
+                $item->date_fin = $fin;
+                $item->active = true;
+                $item->deleted = false;
+
+                try {
+                    $item->save();
+                    $nbre_articles++;
+
+                } catch (Exception $e) {
+                    $alert2 = $alert2 . "<li>Erreur de creation de la promotion pour l'article: <b>" . Article::getDesignation($id_article[$i]) . "</b>. Message d'erreur: " . $e->getMessage() . "</li>";
+                    $error2 = true;
+                    //return redirect()->back()->withAlertDanger("Erreur de creation des promotions.<br>Message d'erreur: <b>" . $e->getMessage() . "</b>");
+                }
+            }
+            //----------------------------------------------------------------------------------------------------------
+
 
         }
 
@@ -335,7 +397,10 @@ class AddController extends Controller
         if ($error2)
             back()->withInput()->with('alert_danger', $alert2);
 
-        return redirect()->back()->with('alert_success', 'Creation des promotions reussite. nbre articles: ' . $nbre_articles);
+        if ($error1 || $error2)
+            return redirect()->back()->withInput();
+        else
+            return redirect()->back()->withInput()->withAlertSuccess("Creation ou mise a jour des promotions reussit. (" . $nbre_articles . " article(s))");
     }
 
 

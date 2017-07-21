@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Session;
 
 class Promotion extends Model
@@ -16,20 +16,13 @@ class Promotion extends Model
         'taux', 'date_debut', 'date_fin', 'active',
         'deleted',
     ];
-    public static function getMagasin($p_id)
-    {
-        $data = self::where('id_magasin', $p_id)->get()->first();
-        if ($data != null)
-            return Magasin::getLibelle($data->id_magasin);
-        else return null;
-    }
 
 
     //fonction static permet de verifier si un promotion d un article dans un magasin est disponible
     public static function hasPromotion($p_id_article)
     {
         $p_id_magasin = Session::get('id_magasin');
-        $promo = collect(Promotion::where('id_article', $p_id_article)->where('id_magasin', $p_id_magasin)->where('active', true)->get());
+        $promo = collect(Promotion::where('id_article', $p_id_article)->where('id_magasin', $p_id_magasin)->where('active', true)->where('deleted', false)->get());
         $now = new Carbon();
 
         if (!$promo->isEmpty()) {
@@ -42,14 +35,6 @@ class Promotion extends Model
             return false;
         }
     }
-    public static function getPrixPromotion($p_id)
-    {
-        $data = Promotion::where('id_article', $p_id)->get()->first();
-        $promo=self::getTauxPromo($data->id_article);
-        if ($data != null)
-            return number_format(Article::getPrixTTC($data->id_article)-((Article::getPrixTTC($data->id_article)*$promo)/100),2);
-        else return null;
-    }
 
     public static function getTauxPromo($p_id_article)
     {
@@ -60,6 +45,15 @@ class Promotion extends Model
         } else return 0;
 
     }
+
+    public static function getTaux($p_id)
+    {
+        $data = self::where('id_promotion', $p_id)->get()->first();
+        if ($data != null)
+            return $data->taux;
+        else return null;
+    }
+
     public static function getDateDebut($p_id)
     {
         $data = self::where('id_promotion', $p_id)->get()->first();
@@ -74,12 +68,36 @@ class Promotion extends Model
             return $data->date_fin;
         else return null;
     }
-    public static function getTaux($p_id)
+
+    public static function Exists($id_magasin, $id_article)
     {
-        $data = self::where('id_promotion', $p_id)->get()->first();
-        if ($data != null)
-            return $data->taux;
-        else return null;
+        $data = Promotion::where('id_article', $id_article)->where('id_magasin', $id_magasin)->where('active', true)->where('deleted', false)->get();
+        if ($data->isEmpty())
+            return false;
+        else return true;
     }
+
+    public static function getPromotion($id_magasin, $id_article)
+    {
+        $data = Promotion::where('id_article', $id_article)->where('id_magasin', $id_magasin)->get();
+        if ($data->isEmpty())
+            return null;
+        else return $data->first();
+    }
+
+    public static function isDate($value)
+    {
+        if (!$value) {
+            return false;
+        }
+
+        try {
+            new \DateTime($value);
+            return true;
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
+
 
 }
