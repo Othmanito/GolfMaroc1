@@ -15,7 +15,7 @@
         <div class="col-lg-8">
             <div class="panel panel-primary">
                 <div class="panel-heading">
-                    Modification du Profile
+                    Profil de {{ $data->nom }} {{ $data->prenom }}
                 </div>
                 <div class="panel-body">
                     <div class="row">
@@ -87,4 +87,3 @@
 
 @section('menu_1')@include('Espace_Admin._nav_menu_1')@endsection
 @section('menu_2')@include('Espace_Admin._nav_menu_2')@endsection
-

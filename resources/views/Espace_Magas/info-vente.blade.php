@@ -1,6 +1,6 @@
 @extends('layouts.main_master')
 
-@section('title') Entree de stock: {{ getDateHelper($transaction->date)." a ".getTimeHelper($transaction->date) }} @endsection
+@section('title') Entree de stock:  @endsection
 
 @section('main_content')
 
@@ -9,8 +9,8 @@
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{{ route('magas.home') }}">Dashboard</a></li>
         <li class="breadcrumb-item">Gestion des transactions</li>
-        <li class="breadcrumb-item"><a href="{{ route('magas.entrees') }}">Liste des entrees de stock</a></li>
-        <li class="breadcrumb-item active">{{ getDateHelper($transaction->date)." a ".getTimeHelper($transaction->date) }}</li>
+        <li class="breadcrumb-item"><a href="{{ route('magas.ventes') }}">Liste des ventes </a></li>
+
     </ol>
 
     <div class="row">
@@ -19,7 +19,7 @@
 
             <div class="panel panel-default">
                 <div class="panel-heading" align="center">
-                    <h4><b>{{ getDateHelper($transaction->date).' a '.getTimeHelper($transaction->date) }}</b></h4>
+                    <h4><b>Detail de la vente</b></h4>
                 </div>
                 <div class="panel-body">
                     @if( $data->isEmpty())
@@ -33,14 +33,14 @@
                                 <th>Quantite</th>
                             </tr>
 
-                            @foreach($data as $trans_article)
+                            @foreach($data as $vente_article)
                                 <tr>
                                     <td align="right">{{ $loop->iteration }}</td>
                                     <td align="center">
-                                        <a href="{{ route('magas.article',['p_id'=>$trans_article->id_article]) }}">{{ \App\Models\Article::getDesignation($trans_article->id_article) }}</a>
+                                        <a href="{{ route('magas.article',['p_id'=>$vente_article->id_article]) }}">{{ \App\Models\Article::getDesignation($vente_article->id_article) }}</a>
                                     </td>
-                                    <td align="right">{{ \App\Models\Taille_article::getTaille($trans_article->id_taille_article) }}</td>
-                                    <td align="right">{{ $trans_article->quantite }}</td>
+                                    <td align="right">{{ \App\Models\Taille_article::getTaille($vente_article->id_taille_article) }}</td>
+                                    <td align="right">{{ $vente_article->quantite }}</td>
                                 </tr>
                             @endforeach
                         </table>

@@ -12,13 +12,14 @@ use App\Models\Vente_article;
 use Illuminate\Support\Facades\Session;
 use PDF;
 use DB;
+use Notification;
 
 class VenteController extends Controller
 {
     public function ventes()
     {
         $data = Vente::all();
-        return view('Espace_Vend.liste-ventes')->withData($data);
+        return view('Espace_Magas.liste-ventes')->withData($data);
     }
 
     public function vente($id_vente)
@@ -28,7 +29,7 @@ class VenteController extends Controller
         //  $vente1=Vente::find($data->id_vente);
       //  $magasin = Magasin::find($vente1->id_magasin);
 
-        return view('Espace_Vend.info-vente')->withData($data);//->withMagasin($magasin);
+        return view('Espace_Magas.info-vente')->withData($data);//->withMagasin($magasin);
     }
 //Vente simple magasinier
     public function addVenteSimple()
@@ -181,6 +182,8 @@ class VenteController extends Controller
         //--------------------------------------------------------------------------------------------------------------
         //return redirect()->back()->withAlertSuccess("Sortie de stock effectuée avec succès");
         //return view('Espace_Magas.add-vente_2-form')->withAlertInfo("Un nouveau panier a ete cree.");
+        $user=User::where('id', Session::get('id_user'))->get()->first();
+        Notification::send(User::first(),new \App\Notifications\AddVenteMNotification($user));
         return redirect()->route('magas.validerVente');
     }
 

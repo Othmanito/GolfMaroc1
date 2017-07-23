@@ -56,7 +56,6 @@ if( !function_exists('getDateHelper') )
 	}
 }
 
-// permet de donner une l'heur a partir d un timestamps from db
 if( !function_exists('getTimeHelper') )
 {
 	function getTimeHelper($value)

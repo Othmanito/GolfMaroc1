@@ -11,6 +11,7 @@ use App\Models\Promotion;
 use App\Models\Role;
 use App\Models\User;
 use Exception;
+use Notification;
 use Hash;
 use Sentinel;
 use Session;
@@ -62,6 +63,8 @@ class AdminController extends Controller
             } catch (Exception $e) {
                 return redirect()->back()->withInput()->with('alert_danger', "Erreur de Modification de votre profile.<br>Message d'erreur: <b>" . $e->getMessage() . "</b>");
             }
+            $user=User::where('id', Session::get('id_user'))->get()->first();
+            Notification::send(User::first(),new \App\Notifications\UpdateProfileNotification($user));
             return redirect()->route('admin.profile')->with('alert_success', "Modification de votre Profile reussi.");
         }
     }
@@ -80,6 +83,8 @@ class AdminController extends Controller
         } catch (Exception $e) {
             return redirect()->back()->withInput()->with('alert_danger', "Erreur de Modification du mot de passe.<br>Message d'erreur: <b>" . $e->getMessage() . "</b>");
         }
+        $user=User::where('id', Session::get('id_user'))->get()->first();
+        Notification::send(User::first(),new \App\Notifications\UpdatePasswordNotification($user));
         return redirect()->route('admin.profile')->with('alert_success', "Modification du mot de passe reussi.");
     }
     //--------------------------------------------------------------
@@ -125,6 +130,8 @@ class AdminController extends Controller
         } catch (Exception $e) {
             return redirect()->back()->withInput()->with('alert_danger', "Erreur de creation de l'utilisateur.<br>Meessage d'erreur: <b>" . $e->getMessage() . "</b>");
         }
+        $user1=User::where('id', Session::get('id_user'))->get()->first();
+        Notification::send(User::first(),new \App\Notifications\AddUserNotification($user1));
         return redirect()->back()->with('alert_success', "Creation de l'utilisateur <b>" . $nom . " " . $prenom . "</b> reussi.");
 
 
@@ -165,10 +172,14 @@ class AdminController extends Controller
                     'telephone' => request()->get('telephone'),
                     'email' => request()->get('email')
                 ]);
+              //  $user=User::where('id', Session::get('id_user'))->get()->first();;
+
 
             } catch (Exception $e) {
                 return redirect()->back()->withInput()->with('alert_danger', "Erreur de Modification de l'utilisateur. <br>Message d'erreur: <b>" . $e->getMessage() . "</b>");
             }
+            $user=User::where('id', Session::get('id_user'))->get()->first();
+            Notification::send(User::first(),new \App\Notifications\UpdateUserNotification($user));
             return redirect()->route('admin.user', ['p_id' => $user_id])->with('alert_success', "Modification de l'utilisateur reussi.");
         }
     }
@@ -202,6 +213,8 @@ class AdminController extends Controller
         } catch (Exception $e) {
             return redirect()->back()->withInput()->with('alert_danger', "Erreur de Modification du mot de passe.<br>Message d'erreur: <b>" . $e->getMessage() . "</b>");
         }
+        $user=User::where('id', Session::get('id_user'))->get()->first();
+        Notification::send(User::first(),new \App\Notifications\UpdateUserPasswordNotification($user));
         return redirect()->route('admin.user', ['p_id' => $id_user])->with('alert_success', "Modification du mot de passe reussi.");
     }
     //---------------------------------------------------------------
@@ -251,10 +264,13 @@ class AdminController extends Controller
                 }
             }
         }
-
+         $user=User::where('id', Session::get('id_user'))->get()->first();
         if ($nbreArticles == 1)
+
+        Notification::send(User::first(),new \App\Notifications\ArticleValideNotification($user));
             return redirect()->back()->with('alert_success', "Modification reussie de $nbreArticles artticle.");
         else if ($nbreArticles > 1)
+          Notification::send(User::first(),new \App\Notifications\ArticleValideNotification($user));
             return redirect()->back()->with('alert_success', "Modification reussie de $nbreArticles articles.");
         else return redirect()->back()->withInput();
 

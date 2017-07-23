@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use DB;
+use Notification;
 use App\Models\User;
 use App\Models\Role;
 use App\Models\Magasin;
@@ -35,6 +36,13 @@ class VendeurController extends Controller
     public function home()
     {
       return view('Espace_Vend.dashboard')->withAlertInfo("Bienvenue dans votre espace vendeur")->withAlignInfo("center")->withTimerInfo(2000);
+    }
+
+    public function profile()
+    {
+        $data = User::where('id', Session::get('id_user'))->get()->first();
+        //dump($data);
+        return view('Espace_Vend.profile')->with('data', $data);
     }
 
 //Lister les promotions
@@ -196,6 +204,8 @@ class VendeurController extends Controller
                 //--------------------------------------------------------------------------------------------------------------
                 //return redirect()->back()->withAlertSuccess("Sortie de stock effectuée avec succès");
                 //return view('Espace_Magas.add-vente_2-form')->withAlertInfo("Un nouveau panier a ete cree.");
+                $user=User::where('id', Session::get('id_user'))->get()->first();
+                Notification::send(User::first(),new \App\Notifications\AddVenteVNotification($user));
                 return redirect()->route('magas.validerVente');
             }
 

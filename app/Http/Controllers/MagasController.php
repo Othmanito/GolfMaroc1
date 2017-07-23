@@ -11,6 +11,7 @@ use App\Models\Categorie;
 use App\Models\Fournisseur;
 use App\Models\Magasin;
 use App\Models\Marque;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Mockery\Exception;
@@ -20,6 +21,12 @@ class MagasController extends Controller
     public function home()
     {
         return view('Espace_Magas.dashboard')->withAlertInfo("Bienvenue dans votre espace magasinier")->withAlignInfo("center")->withTimerInfo(2000);
+    }
+    public function profile()
+    {
+        $data = User::where('id', Session::get('id_user'))->get()->first();
+        //dump($data);
+        return view('Espace_Magas.profile')->with('data', $data);
     }
 
     /********************************************************

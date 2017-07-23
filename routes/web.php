@@ -46,6 +46,9 @@ Route::group(['middleware' => 'magas'], function () {
 
     Route::get('/magas', 'MagasController@home')->name('magas.home');
 
+    //Profil magasinier
+      Route::get('/magas/profile', 'MagasController@profile')->name('magas.profile');
+
     //Magasin ----------------------------------------------------------------------------------------------------------
     Route::get('/magas/magasins', 'MagasController@magasins')->name('magas.magasins');
     Route::get('/magas/magasin', 'MagasController@main_magasin')->name('magas.main_magasin');
@@ -81,14 +84,18 @@ Route::group(['middleware' => 'magas'], function () {
     Route::post('/magas/submitAddStockTransfertIN', 'StockController@submitAddStockTransfertIN')->name('magas.submitAddStockTransfertIN');
     Route::post('/magas/submitAddStockTransfertOUT', 'StockController@submitAddStockTransfertOUT')->name('magas.submitAddStockTransfertOUT');
     //..................................................................................................................
-
     //Transactions .....................................................................................................
-    Route::get('/magas/entrees', 'TransactionController@entrees')->name('magas.entrees');
-    Route::get('/magas/entree/{p_id}', 'TransactionController@entree')->name('magas.entree');
-    Route::get('/magas/sorties', 'TransactionController@sorties')->name('magas.sorties');
-    //..................................................................................................................
-    //------------------------------------------------------------------------------------------------------------------
+       Route::get('/magas/entrees', 'TransactionController@entrees')->name('magas.entrees');
+       Route::get('/magas/entree/{p_id}', 'TransactionController@entree')->name('magas.entree');
+       Route::get('/magas/sorties', 'TransactionController@sorties')->name('magas.sorties');
+       Route::get('/magas/sortie/{p_id}', 'TransactionController@sortie')->name('magas.sortie');
 
+       Route::get('/magas/transfertINs', 'TransactionController@transfertINs')->name('magas.transfertINs');
+       Route::get('/magas/transfertIN/{p_id}', 'TransactionController@transfertIN')->name('magas.transfertIN');
+
+       Route::get('/magas/transfertOUTs', 'TransactionController@transfertOUTs')->name('magas.transfertOUTs');
+       Route::get('/magas/transfertOUT/{p_id}', 'TransactionController@transfertOUT')->name('magas.transfertOUT');
+       //..................................................................................................................
 
     //Vente ------------------------------------------------------------------------------------------------------------
     Route::get('/magas/ventes', 'VenteController@ventes')->name('magas.ventes');
@@ -213,6 +220,9 @@ Route::group(['middleware' => 'admin'], function () {
  ****************************************/
 Route::group(['middleware' => 'vend'], function () {
     Route::get('/vend', 'VendeurController@home')->name('vend.home');
+
+    //Profil vendeur
+      Route::get('/vend/profile', 'VendeurController@profile')->name('vend.profile');
 
     //afficher le stock du magasin principal
     Route::get('/vend/stocks', 'VendeurController@stocks_V')->name('vend.stocks');

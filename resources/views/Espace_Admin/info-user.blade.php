@@ -15,7 +15,7 @@
         <div class="col-lg-8">
             <div class="panel panel-primary">
                 <div class="panel-heading">
-                    Modification du Profile
+                    Profil de {{ $data->nom }} {{ $data->prenom }}
                 </div>
                 <div class="panel-body">
 

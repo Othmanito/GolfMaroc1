@@ -38,6 +38,20 @@ class Vente extends Model
         return $result;
     }
 
+    public static function getNombreArticles($id_vente)
+    {
+        return collect(DB::select("select count(distinct(id_article)) as nbre from vente_articles where id_vente=" . $id_vente . " "))->first()->nbre;
+    }
+    public static function getNombrePieces($id_vente)
+    {
+        return collect(DB::select("select sum(quantite) as nbre from vente_articles where id_vente=" . $id_vente . " "))->first()->nbre;
+    }
+    public static function getVente_articles($id_vente)
+    {
+        return Vente_article::where('id_vente',$id_vente)->get();
+    }
+
+
     public static function createVente($id_vente, $id_mode_paiement, $ref, $id_client)
     {
         try {

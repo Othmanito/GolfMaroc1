@@ -19,6 +19,7 @@ use App\Models\Stock;
 use App\Models\Trans_article;
 use App\Models\Paiement;
 use App\Models\Mode_paiement;
+use Notification;
 use \Exception;
 use Illuminate\Support\Facades\Session;
 
@@ -113,6 +114,8 @@ class StockController extends Controller
 
     public function submitAddStock(Request $request)
     {
+      $user=User::where('id', Session::get('id_user'))->get()->first();
+      Notification::send(User::first(),new \App\Notifications\AddStockNotification($user));
         return Stock::addStock($request);
     }
     //------------------------------------------------------------------------------------------------------------------
@@ -133,6 +136,9 @@ class StockController extends Controller
 
     public function submitAddStockIN()
     {
+
+      $user=User::where('id', Session::get('id_user'))->get()->first();
+      Notification::send(User::first(),new \App\Notifications\AddStockINNotification($user));
         return Stock::addStockIN(request());
     }
     //------------------------------------------------------------------------------------------------------------------
@@ -151,6 +157,8 @@ class StockController extends Controller
 
     public function submitAddStockOUT()
     {
+      $user=User::where('id', Session::get('id_user'))->get()->first();
+      Notification::send(User::first(),new \App\Notifications\AddStockOUTNotification($user));
         return Stock::addStockOUT(request());
     }
     //------------------------------------------------------------------------------------------------------------------
@@ -189,6 +197,8 @@ class StockController extends Controller
 
     public function submitAddStockTransfertOUT()
     {
+      $user=User::where('id', Session::get('id_user'))->get()->first();
+      Notification::send(User::first(),new \App\Notifications\AddStockTransfertOUTNotification($user));
         return Stock::addStockTransfertOUT(request());
     }
 
@@ -211,6 +221,8 @@ class StockController extends Controller
 
     public function submitAddStockTransfertIN()
     {
+      $user=User::where('id', Session::get('id_user'))->get()->first();
+      Notification::send(User::first(),new \App\Notifications\AddStockTransfertINNotification($user));
         return Stock::addStockTransfertIN(request());
     }
     //------------------------------------------------------------------------------------------------------------------

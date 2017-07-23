@@ -55,14 +55,14 @@
                                 </td>
                                 <td>{{ \App\Models\Article::getDesignation($item->id_article) }}</td>
                                 <td align="right">{{ $item->taux }} %</td>
-                                <td align="middle">{{ (new DateTime($item->date_debut))->format('d-m-Y') }} - {{ (new DateTime($item->date_fin))->format('d-m-Y') }}</td>
+                                <td align="middle">{{ getDateHelper($item->date_debut) }} -- {{ getDateHelper($item->date_fin) }} </td>
                                 <td align="middle">
-                                    @if($item->active == false)
+                                    @if(\App\Models\Promotion::hasPromotion($item->id_article) == false)
                                         <div id="circle"
-                                             style="background: darkred;" {!! setPopOver(""," inactive") !!}></div>
-                                    @else
+                                             style="background: darkred;" {!! setPopOver(""," Indisponible") !!}></div>
+                                    @elseif(\App\Models\Promotion::hasPromotion($item->id_article) == true)
                                         <div id="circle"
-                                             style="background: greenyellow;" {!! setPopOver("","active") !!}></div>
+                                             style="background: greenyellow;" {!! setPopOver("","Disponible") !!}></div>
                                     @endif
                                 </td>
                                 <td align="middle">
